@@ -89,7 +89,29 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+}
+
+.pt-safe-top {
+  padding-top: max(env(safe-area-inset-top, 0px), 0.5rem);
+}
+
+/* Custom scrollbar for dark mode */
+.dark ::-webkit-scrollbar {
+  width: 4px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #000;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
 }
