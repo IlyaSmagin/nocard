@@ -1,4 +1,7 @@
 import sharp from 'sharp';
+import { mkdirSync } from 'fs';
+
+mkdirSync('public/icons', { recursive: true });
 
 const sizes = [192, 512];
 
