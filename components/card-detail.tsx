@@ -67,14 +67,12 @@ export function CardDetail({ cardId }: CardDetailProps) {
       </header>
 
       {/* Code Image */}
-      <div className="flex flex-1 items-center justify-center w-full max-w-sm">
-        <div className="w-full rounded-2xl bg-card border border-border p-6 flex items-center justify-center">
-          <img
-            src={card.codeImageDataUrl}
-            alt={`${card.name} barcode or QR code`}
-            className="w-full h-auto max-h-[50dvh] object-contain"
-          />
-        </div>
+      <div className="flex flex-1 items-center justify-center w-full">
+        <img
+          src={card.codeImageDataUrl}
+          alt={`${card.name} barcode or QR code`}
+          className="w-full h-auto max-h-[70dvh] object-contain px-4"
+        />
       </div>
 
       {/* Description */}
