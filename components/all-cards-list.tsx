@@ -47,18 +47,7 @@ export function AllCardsList() {
             onClick={() => recordCardUse(card.id)}
             className="flex h-16 items-center gap-4 rounded-2xl border border-border bg-card px-4 text-card-foreground transition-colors active:bg-secondary"
           >
-            {card.logoDataUrl ? (
-              <img
-                src={card.logoDataUrl}
-                alt={`${card.name} logo`}
-                className="h-10 w-10 rounded-lg object-contain flex-shrink-0"
-              />
-            ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground font-serif text-lg font-bold flex-shrink-0">
-                {card.name.charAt(0).toUpperCase()}
-              </div>
-            )}
-            <div className="flex flex-col min-w-0">
+            <div className="flex flex-col min-w-0 flex-1">
               <span className="font-mono text-sm tracking-wider truncate">
                 {card.name}
               </span>

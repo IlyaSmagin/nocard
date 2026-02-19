@@ -52,18 +52,9 @@ export function CardDetail({ cardId }: CardDetailProps) {
     <main className="flex min-h-dvh flex-col items-center justify-between bg-background px-4 pb-4 pt-safe-top">
       {/* Header */}
       <header className="flex w-full items-center justify-center py-6">
-        <div className="flex items-center gap-3">
-          {card.logoDataUrl && (
-            <img
-              src={card.logoDataUrl}
-              alt={`${card.name} logo`}
-              className="h-8 w-8 rounded-lg object-contain"
-            />
-          )}
-          <h1 className="font-mono text-xl tracking-widest uppercase text-foreground">
-            {card.name}
-          </h1>
-        </div>
+        <h1 className="font-mono text-xl tracking-widest uppercase text-foreground">
+          {card.name}
+        </h1>
       </header>
 
       {/* Code Image */}

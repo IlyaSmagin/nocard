@@ -7,7 +7,6 @@ export interface CardData {
   id: string;
   name: string;
   description: string;
-  logoDataUrl: string | null;
   codeImageDataUrl: string;
   lastUsed: number;
   createdAt: number;

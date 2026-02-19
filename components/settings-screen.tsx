@@ -168,17 +168,9 @@ export function SettingsScreen() {
               key={card.id}
               className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-card-foreground"
             >
-              {card.logoDataUrl ? (
-                <img
-                  src={card.logoDataUrl}
-                  alt={`${card.name} logo`}
-                  className="h-10 w-10 rounded-lg object-contain flex-shrink-0"
-                />
-              ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground font-serif text-lg font-bold flex-shrink-0">
-                  {card.name.charAt(0).toUpperCase()}
-                </div>
-              )}
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground font-serif text-lg font-bold flex-shrink-0">
+                {card.name.slice(0, 2).toUpperCase()}
+              </div>
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="font-mono text-sm tracking-wider truncate">
                   {card.name}
@@ -240,16 +232,12 @@ function CardForm({
 }) {
   const [name, setName] = useState(card?.name || "");
   const [description, setDescription] = useState(card?.description || "");
-  const [logoDataUrl, setLogoDataUrl] = useState<string | null>(
-    card?.logoDataUrl || null
-  );
   const [codeImageDataUrl, setCodeImageDataUrl] = useState<string>(
     card?.codeImageDataUrl || ""
   );
   const [saving, setSaving] = useState(false);
   const codeUploadRef = useRef<HTMLInputElement>(null);
   const codeCameraRef = useRef<HTMLInputElement>(null);
-  const logoInputRef = useRef<HTMLInputElement>(null);
 
   const readFileAsDataUrl = useCallback(
     (file: File): Promise<string> =>
@@ -273,17 +261,6 @@ function CardForm({
     [readFileAsDataUrl]
   );
 
-  const handleLogoImage = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        const dataUrl = await readFileAsDataUrl(file);
-        setLogoDataUrl(dataUrl);
-      }
-    },
-    [readFileAsDataUrl]
-  );
-
   const handleSave = async () => {
     if (!name.trim() || !codeImageDataUrl) return;
     setSaving(true);
@@ -292,14 +269,12 @@ function CardForm({
         ...card,
         name: name.trim(),
         description: description.trim(),
-        logoDataUrl,
         codeImageDataUrl,
       });
     } else {
       await addCard({
         name: name.trim(),
         description: description.trim(),
-        logoDataUrl,
         codeImageDataUrl,
       });
     }
@@ -394,36 +369,6 @@ function CardForm({
                   src={codeImageDataUrl}
                   alt="Code preview"
                   className="max-h-32 object-contain"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Logo Image */}
-          <div>
-            <label className="mb-1 block font-mono text-xs tracking-widest uppercase text-muted-foreground">
-              Logo (optional)
-            </label>
-            <input
-              ref={logoInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleLogoImage}
-              className="hidden"
-            />
-            <button
-              onClick={() => logoInputRef.current?.click()}
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-input bg-background font-mono text-xs tracking-wider text-foreground transition-colors active:bg-secondary"
-            >
-              <Upload className="h-4 w-4" />
-              {logoDataUrl ? "Change Logo" : "Upload Logo"}
-            </button>
-            {logoDataUrl && (
-              <div className="mt-3 flex items-center justify-center">
-                <img
-                  src={logoDataUrl}
-                  alt="Logo preview"
-                  className="h-12 w-12 rounded-lg object-contain"
                 />
               </div>
             )}
