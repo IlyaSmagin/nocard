@@ -11,6 +11,7 @@ export interface CardData {
   lastUsed: number;
   createdAt: number;
   orderLocked: boolean;
+  order: number;
 }
 
 export interface AppSettings {

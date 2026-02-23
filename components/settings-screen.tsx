@@ -15,6 +15,8 @@ import {
   Rows3,
   Lock,
   Unlock,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import {
   useCards,
@@ -31,6 +33,25 @@ export function SettingsScreen() {
   const { settings } = useSettings();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editCard, setEditCard] = useState<CardData | null>(null);
+
+  const handleMoveCard = async (cardId: string, direction: "up" | "down") => {
+    const cardIndex = cards.findIndex((c) => c.id === cardId);
+    if (cardIndex === -1) return;
+
+    const newIndex = direction === "up" ? cardIndex - 1 : cardIndex + 1;
+    if (newIndex < 0 || newIndex >= cards.length) return;
+
+    const reorderedCards = [...cards];
+    [reorderedCards[cardIndex], reorderedCards[newIndex]] = [
+      reorderedCards[newIndex],
+      reorderedCards[cardIndex],
+    ];
+
+    // Update order field for all cards
+    for (let i = 0; i < reorderedCards.length; i++) {
+      await updateCard({ ...reorderedCards[i], order: i });
+    }
+  };
 
   return (
     <main className="flex min-h-dvh flex-col bg-background px-4 pb-4 pt-safe-top">
@@ -182,6 +203,29 @@ export function SettingsScreen() {
                 )}
               </div>
               <div className="flex gap-2 flex-shrink-0">
+                {settings.orderLocked && (
+                  <>
+                    <button
+                      onClick={() => handleMoveCard(card.id, "up")}
+                      disabled={cards.findIndex((c) => c.id === card.id) === 0}
+                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-colors active:bg-border disabled:opacity-30"
+                      aria-label={`Move ${card.name} up`}
+                    >
+                      <ArrowUp className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => handleMoveCard(card.id, "down")}
+                      disabled={
+                        cards.findIndex((c) => c.id === card.id) ===
+                        cards.length - 1
+                      }
+                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-colors active:bg-border disabled:opacity-30"
+                      aria-label={`Move ${card.name} down`}
+                    >
+                      <ArrowDown className="h-4 w-4" />
+                    </button>
+                  </>
+                )}
                 <button
                   onClick={() => {
                     setEditCard(card);

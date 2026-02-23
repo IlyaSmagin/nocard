@@ -12,7 +12,9 @@ export function HomeScreen() {
   const { settings } = useSettings();
 
   const sortedCards = useMemo(() => {
-    if (settings.orderLocked) return cards;
+    if (settings.orderLocked) {
+      return [...cards].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    }
     return [...cards].sort((a, b) => b.lastUsed - a.lastUsed);
   }, [cards, settings.orderLocked]);
 
