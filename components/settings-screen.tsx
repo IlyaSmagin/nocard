@@ -34,24 +34,34 @@ export function SettingsScreen() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editCard, setEditCard] = useState<CardData | null>(null);
 
-  const handleMoveCard = async (cardId: string, direction: "up" | "down") => {
-    const cardIndex = cards.findIndex((c) => c.id === cardId);
-    if (cardIndex === -1) return;
+  const handleMoveCard = useCallback(
+    async (cardId: string, direction: "up" | "down") => {
+      const cardIndex = cards.findIndex((c) => c.id === cardId);
+      console.log("[v0] handleMoveCard called for card:", cardId, "direction:", direction, "index:", cardIndex);
+      if (cardIndex === -1) return;
 
-    const newIndex = direction === "up" ? cardIndex - 1 : cardIndex + 1;
-    if (newIndex < 0 || newIndex >= cards.length) return;
+      const newIndex = direction === "up" ? cardIndex - 1 : cardIndex + 1;
+      if (newIndex < 0 || newIndex >= cards.length) {
+        console.log("[v0] Invalid newIndex:", newIndex);
+        return;
+      }
 
-    const reorderedCards = [...cards];
-    [reorderedCards[cardIndex], reorderedCards[newIndex]] = [
-      reorderedCards[newIndex],
-      reorderedCards[cardIndex],
-    ];
+      const reorderedCards = [...cards];
+      [reorderedCards[cardIndex], reorderedCards[newIndex]] = [
+        reorderedCards[newIndex],
+        reorderedCards[cardIndex],
+      ];
 
-    // Update order field for all cards
-    for (let i = 0; i < reorderedCards.length; i++) {
-      await updateCard({ ...reorderedCards[i], order: i });
-    }
-  };
+      console.log("[v0] Starting to update card orders...");
+      // Update order field for all cards
+      for (let i = 0; i < reorderedCards.length; i++) {
+        console.log("[v0] Updating card:", reorderedCards[i].id, "new order:", i);
+        await updateCard({ ...reorderedCards[i], order: i });
+      }
+      console.log("[v0] Card reordering complete");
+    },
+    [cards]
+  );
 
   return (
     <main className="flex min-h-dvh flex-col bg-background px-4 pb-4 pt-safe-top">

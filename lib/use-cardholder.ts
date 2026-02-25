@@ -33,14 +33,16 @@ export function useSettings() {
 }
 
 export async function addCard(
-  card: Omit<CardData, "id" | "lastUsed" | "createdAt" | "orderLocked">
+  card: Omit<CardData, "id" | "lastUsed" | "createdAt" | "orderLocked" | "order">
 ) {
+  const allCards = await getAllCards();
   const newCard: CardData = {
     ...card,
     id: generateId(),
     lastUsed: Date.now(),
     createdAt: Date.now(),
     orderLocked: false,
+    order: allCards.length,
   };
   await saveCard(newCard);
   await mutate("cards");
