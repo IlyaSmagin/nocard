@@ -119,6 +119,19 @@ export async function saveSettings(settings: AppSettings): Promise<void> {
   });
 }
 
+export async function saveCardsInBatch(cards: CardData[]): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(CARDS_STORE, "readwrite");
+    const store = tx.objectStore(CARDS_STORE);
+    for (const card of cards) {
+      store.put(card);
+    }
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
 export function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }

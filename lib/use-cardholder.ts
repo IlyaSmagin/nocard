@@ -5,6 +5,7 @@ import {
   getAllCards,
   getSettings,
   saveCard,
+  saveCardsInBatch,
   deleteCard,
   touchCard,
   saveSettings,
@@ -68,6 +69,16 @@ export async function removeCard(id: string) {
 export async function recordCardUse(id: string) {
   await touchCard(id);
   await mutate("cards", undefined, { revalidate: true });
+}
+
+export async function reorderCards(reorderedCards: CardData[]) {
+  const updated = reorderedCards.map((card, i) => ({ ...card, order: i }));
+  // Optimistic: show new order immediately
+  await mutate("cards", updated, { revalidate: false });
+  // Persist all to IndexedDB in a single transaction
+  await saveCardsInBatch(updated);
+  // Revalidate from DB to ensure consistency
+  await mutate("cards");
 }
 
 export async function updateSettings(settings: AppSettings) {

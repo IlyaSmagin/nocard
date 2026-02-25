@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -24,6 +24,7 @@ import {
   addCard,
   updateCard,
   removeCard,
+  reorderCards,
   updateSettings,
 } from "@/lib/use-cardholder";
 import type { CardData } from "@/lib/db";
@@ -34,37 +35,28 @@ export function SettingsScreen() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editCard, setEditCard] = useState<CardData | null>(null);
 
-  useEffect(() => {
-    console.log("[v0] Cards updated in SettingsScreen:", cards.map(c => ({ id: c.id, name: c.name, order: c.order })));
-  }, [cards]);
+  // Sort cards by order field for display
+  const sortedCards = useMemo(
+    () => [...cards].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    [cards]
+  );
 
   const handleMoveCard = useCallback(
     async (cardId: string, direction: "up" | "down") => {
-      const cardIndex = cards.findIndex((c) => c.id === cardId);
-      console.log("[v0] handleMoveCard called for card:", cardId, "direction:", direction, "index:", cardIndex);
-      if (cardIndex === -1) return;
+      const list = [...sortedCards];
+      const fromIndex = list.findIndex((c) => c.id === cardId);
+      if (fromIndex === -1) return;
 
-      const newIndex = direction === "up" ? cardIndex - 1 : cardIndex + 1;
-      if (newIndex < 0 || newIndex >= cards.length) {
-        console.log("[v0] Invalid newIndex:", newIndex);
-        return;
-      }
+      const toIndex = direction === "up" ? fromIndex - 1 : fromIndex + 1;
+      if (toIndex < 0 || toIndex >= list.length) return;
 
-      const reorderedCards = [...cards];
-      [reorderedCards[cardIndex], reorderedCards[newIndex]] = [
-        reorderedCards[newIndex],
-        reorderedCards[cardIndex],
-      ];
+      // Swap positions
+      [list[fromIndex], list[toIndex]] = [list[toIndex], list[fromIndex]];
 
-      console.log("[v0] Starting to update card orders...");
-      // Update order field for all cards
-      for (let i = 0; i < reorderedCards.length; i++) {
-        console.log("[v0] Updating card:", reorderedCards[i].id, "new order:", i);
-        await updateCard({ ...reorderedCards[i], order: i });
-      }
-      console.log("[v0] Card reordering complete");
+      // Single batch write with optimistic UI
+      await reorderCards(list);
     },
-    [cards]
+    [sortedCards]
   );
 
   return (
@@ -191,14 +183,14 @@ export function SettingsScreen() {
           </button>
         </div>
 
-        {cards.length === 0 && !showAddForm && (
+        {sortedCards.length === 0 && !showAddForm && (
           <div className="flex h-32 items-center justify-center rounded-2xl border border-dashed border-border text-muted-foreground font-mono text-sm tracking-wider">
             No cards added
           </div>
         )}
 
         <div className="flex flex-col gap-3">
-          {cards.map((card) => (
+          {sortedCards.map((card, index) => (
             <div
               key={card.id}
               className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-card-foreground transition-all duration-200 ease-out"
@@ -221,7 +213,7 @@ export function SettingsScreen() {
                   <>
                     <button
                       onClick={() => handleMoveCard(card.id, "up")}
-                      disabled={cards.findIndex((c) => c.id === card.id) === 0}
+                      disabled={index === 0}
                       className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-all duration-150 ease-out active:scale-95 active:bg-border disabled:opacity-30 disabled:cursor-not-allowed"
                       aria-label={`Move ${card.name} up`}
                     >
@@ -229,10 +221,7 @@ export function SettingsScreen() {
                     </button>
                     <button
                       onClick={() => handleMoveCard(card.id, "down")}
-                      disabled={
-                        cards.findIndex((c) => c.id === card.id) ===
-                        cards.length - 1
-                      }
+                      disabled={index === sortedCards.length - 1}
                       className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-all duration-150 ease-out active:scale-95 active:bg-border disabled:opacity-30 disabled:cursor-not-allowed"
                       aria-label={`Move ${card.name} down`}
                     >
