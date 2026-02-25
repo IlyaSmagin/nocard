@@ -187,7 +187,7 @@ export function SettingsScreen() {
           {cards.map((card) => (
             <div
               key={card.id}
-              className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-card-foreground"
+              className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-card-foreground transition-all duration-200 ease-out"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground font-serif text-lg font-bold flex-shrink-0">
                 {card.name.slice(0, 2).toUpperCase()}
@@ -208,10 +208,10 @@ export function SettingsScreen() {
                     <button
                       onClick={() => handleMoveCard(card.id, "up")}
                       disabled={cards.findIndex((c) => c.id === card.id) === 0}
-                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-colors active:bg-border disabled:opacity-30"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-all duration-150 ease-out active:scale-95 active:bg-border disabled:opacity-30 disabled:cursor-not-allowed"
                       aria-label={`Move ${card.name} up`}
                     >
-                      <ArrowUp className="h-4 w-4" />
+                      <ArrowUp className="h-4 w-4 transition-transform duration-150" />
                     </button>
                     <button
                       onClick={() => handleMoveCard(card.id, "down")}
@@ -219,10 +219,10 @@ export function SettingsScreen() {
                         cards.findIndex((c) => c.id === card.id) ===
                         cards.length - 1
                       }
-                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-colors active:bg-border disabled:opacity-30"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-all duration-150 ease-out active:scale-95 active:bg-border disabled:opacity-30 disabled:cursor-not-allowed"
                       aria-label={`Move ${card.name} down`}
                     >
-                      <ArrowDown className="h-4 w-4" />
+                      <ArrowDown className="h-4 w-4 transition-transform duration-150" />
                     </button>
                   </>
                 )}
@@ -231,7 +231,7 @@ export function SettingsScreen() {
                     setEditCard(card);
                     setShowAddForm(true);
                   }}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-colors active:bg-border"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-all duration-150 ease-out active:scale-95 active:bg-border"
                   aria-label={`Edit ${card.name}`}
                 >
                   <Pencil className="h-4 w-4" />
@@ -242,7 +242,7 @@ export function SettingsScreen() {
                       removeCard(card.id);
                     }
                   }}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors active:bg-accent/20"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent transition-all duration-150 ease-out active:scale-95 active:bg-accent/20"
                   aria-label={`Delete ${card.name}`}
                 >
                   <Trash2 className="h-4 w-4" />
