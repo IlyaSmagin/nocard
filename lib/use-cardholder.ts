@@ -14,14 +14,20 @@ import {
 } from "./db";
 
 export function useCards() {
-  const { data, error, isLoading } = useSWR("cards", getAllCards, {
+  const { data, error, isLoading, mutate: localMutate } = useSWR("cards", getAllCards, {
     fallbackData: [],
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    dedupingInterval: 0,
   });
-  return { cards: data || [], error, isLoading };
+  return { cards: data || [], error, isLoading, mutate: localMutate };
 }
 
 export function useSettings() {
-  const { data, error, isLoading } = useSWR("settings", getSettings, {
+  const { data, error, isLoading, mutate: localMutate } = useSWR("settings", getSettings, {
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    dedupingInterval: 0,
     fallbackData: {
       id: "app" as const,
       darkMode: true,
@@ -29,7 +35,7 @@ export function useSettings() {
       orderLocked: false,
     },
   });
-  return { settings: data!, error, isLoading };
+  return { settings: data!, error, isLoading, mutate: localMutate };
 }
 
 export async function addCard(
@@ -45,26 +51,26 @@ export async function addCard(
     order: allCards.length,
   };
   await saveCard(newCard);
-  await mutate("cards");
+  await mutate("cards", undefined, { revalidate: true });
   return newCard;
 }
 
 export async function updateCard(card: CardData) {
   await saveCard(card);
-  await mutate("cards");
+  await mutate("cards", undefined, { revalidate: true });
 }
 
 export async function removeCard(id: string) {
   await deleteCard(id);
-  await mutate("cards");
+  await mutate("cards", undefined, { revalidate: true });
 }
 
 export async function recordCardUse(id: string) {
   await touchCard(id);
-  await mutate("cards");
+  await mutate("cards", undefined, { revalidate: true });
 }
 
 export async function updateSettings(settings: AppSettings) {
   await saveSettings(settings);
-  await mutate("settings");
+  await mutate("settings", undefined, { revalidate: true });
 }

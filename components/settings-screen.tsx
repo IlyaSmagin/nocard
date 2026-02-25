@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -33,6 +33,10 @@ export function SettingsScreen() {
   const { settings } = useSettings();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editCard, setEditCard] = useState<CardData | null>(null);
+
+  useEffect(() => {
+    console.log("[v0] Cards updated in SettingsScreen:", cards.map(c => ({ id: c.id, name: c.name, order: c.order })));
+  }, [cards]);
 
   const handleMoveCard = useCallback(
     async (cardId: string, direction: "up" | "down") => {
