@@ -18,16 +18,22 @@ import {
 import {
   useCards,
   useSettings,
+  addCard,
+  updateCard,
   removeCard,
   reorderCards,
   updateSettings,
 } from "@/lib/use-cardholder";
 import { CardForm } from "./card-form";
+import { CardListItem } from "./card-list-item";
+import { SettingsHeader } from "./settings-header";
 import type { CardData } from "@/lib/db";
 
 export function SettingsScreen() {
   const { cards } = useCards();
   const { settings } = useSettings();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editCard, setEditCard] = useState<CardData | null>(null);
   const [newCardIds, setNewCardIds] = useState<Set<string>>(new Set());
