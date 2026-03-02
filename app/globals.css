@@ -112,26 +112,34 @@
   padding-top: max(env(safe-area-inset-top, 0px), 0.5rem);
 }
 
-/* Smooth reorder animation */
-@keyframes slideInUp {
+/* Card animation utilities */
+@keyframes cardEnter {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(12px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
+@keyframes cardReorder {
+  0% {
     opacity: 1;
-    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@layer components {
+  .card-enter {
+    animation: cardEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .card-reorder {
+    animation: cardReorder 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 

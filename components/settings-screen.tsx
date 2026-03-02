@@ -1,21 +1,19 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
   Plus,
-  Trash2,
-  Pencil,
+  Camera,
+  Upload,
   Moon,
   Sun,
   Columns2,
   Rows3,
   Lock,
   Unlock,
-  ArrowUp,
-  ArrowDown,
 } from "lucide-react";
 import {
   useCards,
@@ -28,12 +26,11 @@ import { CardForm } from "./card-form";
 import type { CardData } from "@/lib/db";
 
 export function SettingsScreen() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const { cards } = useCards();
   const { settings } = useSettings();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editCard, setEditCard] = useState<CardData | null>(null);
+  const [newCardIds, setNewCardIds] = useState<Set<string>>(new Set());
 
   // Check for "add" query parameter and open modal
   useEffect(() => {
@@ -42,6 +39,31 @@ export function SettingsScreen() {
       setEditCard(null);
     }
   }, [searchParams]);
+
+  // Track newly added cards for animation
+  const prevCardCountRef = useRef(cards.length);
+  useEffect(() => {
+    if (cards.length > prevCardCountRef.current) {
+      // A card was added - mark the newly added card as new
+      const newCard = cards[cards.length - 1];
+      if (newCard) {
+        setNewCardIds((prev) => {
+          const next = new Set(prev);
+          next.add(newCard.id);
+          // Clear animation flag after animation completes
+          setTimeout(() => {
+            setNewCardIds((current) => {
+              const updated = new Set(current);
+              updated.delete(newCard.id);
+              return updated;
+            });
+          }, 350);
+          return next;
+        });
+      }
+    }
+    prevCardCountRef.current = cards.length;
+  }, [cards.length]);
 
   // Sort cards by order field for display
   const sortedCards = useMemo(
@@ -199,67 +221,26 @@ export function SettingsScreen() {
 
         <div className="flex flex-col gap-3">
           {sortedCards.map((card, index) => (
-            <div
+            <CardListItem
               key={card.id}
-              className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-card-foreground transition-all duration-200 ease-out"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground font-serif text-lg font-bold flex-shrink-0">
-                {card.name.slice(0, 2).toUpperCase()}
-              </div>
-              <div className="flex flex-col min-w-0 flex-1">
-                <span className="font-mono text-sm tracking-wider truncate">
-                  {card.name}
-                </span>
-                {card.description && (
-                  <span className="text-xs text-muted-foreground truncate">
-                    {card.description}
-                  </span>
-                )}
-              </div>
-              <div className="flex gap-2 flex-shrink-0">
-                {settings.orderLocked && (
-                  <>
-                    <button
-                      onClick={() => handleMoveCard(card.id, "up")}
-                      disabled={index === 0}
-                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-all duration-150 ease-out active:scale-95 active:bg-border disabled:opacity-30 disabled:cursor-not-allowed"
-                      aria-label={`Move ${card.name} up`}
-                    >
-                      <ArrowUp className="h-4 w-4 transition-transform duration-150" />
-                    </button>
-                    <button
-                      onClick={() => handleMoveCard(card.id, "down")}
-                      disabled={index === sortedCards.length - 1}
-                      className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-all duration-150 ease-out active:scale-95 active:bg-border disabled:opacity-30 disabled:cursor-not-allowed"
-                      aria-label={`Move ${card.name} down`}
-                    >
-                      <ArrowDown className="h-4 w-4 transition-transform duration-150" />
-                    </button>
-                  </>
-                )}
-                <button
-                  onClick={() => {
-                    setEditCard(card);
-                    setShowAddForm(true);
-                  }}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-all duration-150 ease-out active:scale-95 active:bg-border"
-                  aria-label={`Edit ${card.name}`}
-                >
-                  <Pencil className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => {
-                    if (confirm(`Delete "${card.name}"?`)) {
-                      removeCard(card.id);
-                    }
-                  }}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent transition-all duration-150 ease-out active:scale-95 active:bg-accent/20"
-                  aria-label={`Delete ${card.name}`}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
+              card={card}
+              index={index}
+              isLocked={settings.orderLocked}
+              isMoveUpDisabled={index === 0}
+              isMoveDownDisabled={index === sortedCards.length - 1}
+              isNewCard={newCardIds.has(card.id)}
+              onMoveUp={(cardId) => handleMoveCard(cardId, "up")}
+              onMoveDown={(cardId) => handleMoveCard(cardId, "down")}
+              onEdit={(cardToEdit) => {
+                setEditCard(cardToEdit);
+                setShowAddForm(true);
+              }}
+              onDelete={(cardId) => {
+                if (confirm(`Delete "${sortedCards.find((c) => c.id === cardId)?.name}"?`)) {
+                  removeCard(cardId);
+                }
+              }}
+            />
           ))}
         </div>
       </section>
