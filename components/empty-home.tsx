@@ -16,7 +16,7 @@ export function EmptyHome() {
         </p>
       </div>
       <Link
-        href="/settings"
+        href="/settings?add=true"
         className="flex h-14 items-center gap-2 rounded-2xl bg-accent px-8 text-accent-foreground font-mono text-sm tracking-widest uppercase transition-colors active:opacity-80"
       >
         <Plus className="h-5 w-5" />

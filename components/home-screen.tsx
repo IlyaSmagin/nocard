@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { Settings } from "lucide-react";
+import { Settings, Plus } from "lucide-react";
 import { useCards, useSettings, recordCardUse } from "@/lib/use-cardholder";
 import { CardTile } from "./card-tile";
 import { EmptyHome } from "./empty-home";
@@ -49,6 +49,15 @@ export function HomeScreen() {
         <EmptyHome />
       ) : (
         <>
+          {/* Add Card Button - Top */}
+          <Link
+            href="/settings?add=true"
+            className="mb-4 flex h-16 w-full items-center justify-center rounded-2xl bg-foreground text-background font-serif text-lg font-bold tracking-wide transition-colors active:opacity-80"
+          >
+            <Plus className="mr-2 h-5 w-5" />
+            Add Card
+          </Link>
+
           {/* All Cards Button */}
           <Link
             href="/all-cards"
