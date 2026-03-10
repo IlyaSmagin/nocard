@@ -58,6 +58,13 @@ export function CardDetail({ cardId }: CardDetailProps) {
     }
   };
 
+  const handleContextMenu = (e: React.MouseEvent<HTMLImageElement>) => {
+    // Suppress context menu on touch devices to prevent interference with hold-to-invert
+    if (e.pointerType === "touch" || /mobile|tablet|android|ios/i.test(navigator.userAgent)) {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     return () => {
       if (longPressTimerRef.current) {
@@ -113,6 +120,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onTouchCancel={handleTouchEnd}
+          onContextMenu={handleContextMenu}
         />
         <p className="text-xs text-muted-foreground font-mono">
           Hold 5s to invert colors • {isInverted ? "Inverted" : "Normal"}
