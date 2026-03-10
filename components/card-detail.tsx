@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getCard, type CardData, touchCard } from "@/lib/db";
@@ -14,6 +14,9 @@ export function CardDetail({ cardId }: CardDetailProps) {
   const router = useRouter();
   const [card, setCard] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isInverted, setIsInverted] = useState(false);
+  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isLongPressRef = useRef(false);
 
   useEffect(() => {
     getCard(cardId).then((c) => {
@@ -24,6 +27,44 @@ export function CardDetail({ cardId }: CardDetailProps) {
       }
     });
   }, [cardId]);
+
+  const handleMouseDown = () => {
+    isLongPressRef.current = false;
+    longPressTimerRef.current = setTimeout(() => {
+      isLongPressRef.current = true;
+      setIsInverted((prev) => !prev);
+    }, 5000);
+  };
+
+  const handleMouseUp = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
+  const handleTouchStart = () => {
+    isLongPressRef.current = false;
+    longPressTimerRef.current = setTimeout(() => {
+      isLongPressRef.current = true;
+      setIsInverted((prev) => !prev);
+    }, 5000);
+  };
+
+  const handleTouchEnd = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current);
+      }
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -57,13 +98,25 @@ export function CardDetail({ cardId }: CardDetailProps) {
         </h1>
       </header>
 
-      {/* Code Image */}
-      <div className="flex flex-1 items-center justify-center w-full">
+      {/* Code Image with Inversion Toggle */}
+      <div className="flex flex-1 items-center justify-center w-full flex-col gap-4">
         <img
           src={card.codeImageDataUrl}
           alt={`${card.name} barcode or QR code`}
-          className="w-full h-auto max-h-[70dvh] object-contain px-4"
+          className="w-full h-auto max-h-[60dvh] object-contain px-4 qr-invertible transition-all duration-300 ease-out"
+          style={{
+            filter: isInverted ? "invert(1)" : "invert(0)",
+          }}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
         />
+        <p className="text-xs text-muted-foreground font-mono">
+          Hold 5s to invert colors • {isInverted ? "Inverted" : "Normal"}
+        </p>
       </div>
 
       {/* Description */}
