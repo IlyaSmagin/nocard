@@ -159,11 +159,15 @@ export function CardDetail({ cardId }: CardDetailProps) {
 
       {/* Code Image with Inversion Toggle */}
       <div className="flex flex-1 items-center justify-center w-full flex-col gap-2">
-        {isHolding && (
-          <p className="text-xs text-muted-foreground font-mono animate-in fade-in duration-200">
-            {countdown}s... • {isInverted ? "Inverted" : "Normal"}
-          </p>
-        )}
+        <p 
+          className="text-xs text-muted-foreground font-mono transition-all duration-200 ease-out h-5"
+          style={{
+            opacity: isHolding ? 1 : 0,
+            pointerEvents: isHolding ? "auto" : "none",
+          }}
+        >
+          {countdown}s... • {isInverted ? "Inverted" : "Normal"}
+        </p>
         <img
           src={card.codeImageDataUrl}
           alt={`${card.name} barcode or QR code`}
