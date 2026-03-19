@@ -15,8 +15,10 @@ export function CardDetail({ cardId }: CardDetailProps) {
   const [card, setCard] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isInverted, setIsInverted] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [isHolding, setIsHolding] = useState(false);
+  const [countdown, setCountdown] = useState(5);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isLongPressRef = useRef(false);
 
   useEffect(() => {
@@ -30,8 +32,25 @@ export function CardDetail({ cardId }: CardDetailProps) {
   }, [cardId]);
 
   const handleMouseDown = () => {
-    setHasInteracted(true);
+    setIsHolding(true);
+    setCountdown(5);
     isLongPressRef.current = false;
+
+    // Start countdown
+    countdownIntervalRef.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          if (countdownIntervalRef.current) {
+            clearInterval(countdownIntervalRef.current);
+            countdownIntervalRef.current = null;
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    // Trigger inversion after 5 seconds
     longPressTimerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
       setIsInverted((prev) => !prev);
@@ -39,15 +58,37 @@ export function CardDetail({ cardId }: CardDetailProps) {
   };
 
   const handleMouseUp = () => {
+    setIsHolding(false);
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
     }
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
   };
 
   const handleTouchStart = () => {
-    setHasInteracted(true);
+    setIsHolding(true);
+    setCountdown(5);
     isLongPressRef.current = false;
+
+    // Start countdown
+    countdownIntervalRef.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          if (countdownIntervalRef.current) {
+            clearInterval(countdownIntervalRef.current);
+            countdownIntervalRef.current = null;
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    // Trigger inversion after 5 seconds
     longPressTimerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
       setIsInverted((prev) => !prev);
@@ -55,9 +96,14 @@ export function CardDetail({ cardId }: CardDetailProps) {
   };
 
   const handleTouchEnd = () => {
+    setIsHolding(false);
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
+    }
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
     }
   };
 
@@ -72,6 +118,9 @@ export function CardDetail({ cardId }: CardDetailProps) {
     return () => {
       if (longPressTimerRef.current) {
         clearTimeout(longPressTimerRef.current);
+      }
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current);
       }
     };
   }, []);
@@ -110,9 +159,9 @@ export function CardDetail({ cardId }: CardDetailProps) {
 
       {/* Code Image with Inversion Toggle */}
       <div className="flex flex-1 items-center justify-center w-full flex-col gap-2">
-        {hasInteracted && (
+        {isHolding && (
           <p className="text-xs text-muted-foreground font-mono animate-in fade-in duration-200">
-            Hold 5s to invert • {isInverted ? "Inverted" : "Normal"}
+            {countdown}s... • {isInverted ? "Inverted" : "Normal"}
           </p>
         )}
         <img
