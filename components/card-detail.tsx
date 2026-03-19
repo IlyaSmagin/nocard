@@ -15,6 +15,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
   const [card, setCard] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isInverted, setIsInverted] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isLongPressRef = useRef(false);
 
@@ -29,6 +30,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
   }, [cardId]);
 
   const handleMouseDown = () => {
+    setHasInteracted(true);
     isLongPressRef.current = false;
     longPressTimerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
@@ -44,6 +46,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
   };
 
   const handleTouchStart = () => {
+    setHasInteracted(true);
     isLongPressRef.current = false;
     longPressTimerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
@@ -106,7 +109,12 @@ export function CardDetail({ cardId }: CardDetailProps) {
       </header>
 
       {/* Code Image with Inversion Toggle */}
-      <div className="flex flex-1 items-center justify-center w-full flex-col gap-4">
+      <div className="flex flex-1 items-center justify-center w-full flex-col gap-2">
+        {hasInteracted && (
+          <p className="text-xs text-muted-foreground font-mono animate-in fade-in duration-200">
+            Hold 5s to invert • {isInverted ? "Inverted" : "Normal"}
+          </p>
+        )}
         <img
           src={card.codeImageDataUrl}
           alt={`${card.name} barcode or QR code`}
@@ -122,9 +130,6 @@ export function CardDetail({ cardId }: CardDetailProps) {
           onTouchCancel={handleTouchEnd}
           onContextMenu={handleContextMenu}
         />
-        <p className="text-xs text-muted-foreground font-mono">
-          Hold 5s to invert colors • {isInverted ? "Inverted" : "Normal"}
-        </p>
       </div>
 
       {/* Description */}
