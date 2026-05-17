@@ -1,12 +1,16 @@
 {
+  "id": "/",
   "name": "Cardholder",
   "short_name": "Cardholder",
   "description": "Digital loyalty cardholder - all your cards offline.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "orientation": "portrait",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -24,5 +28,6 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "categories": ["shopping", "productivity"]
 }
