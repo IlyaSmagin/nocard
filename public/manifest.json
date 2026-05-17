@@ -1,23 +1,12 @@
 {
-  "name": "Cardholder - Digital Loyalty Cards",
+  "name": "Cardholder",
   "short_name": "Cardholder",
-  "description": "Your digital loyalty cards, always offline. Quick access to QR codes and barcodes at checkout.",
+  "description": "Digital loyalty cardholder - all your cards offline.",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui", "fullscreen"],
   "background_color": "#000000",
   "theme_color": "#000000",
-  "orientation": "portrait-primary",
-  "categories": ["shopping", "utilities"],
-  "screenshots": [
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/icons/icon-192.png",
