@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Cardholder",
+    startupImage: "/icons/icon-192.png",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  icons: {
+    apple: "/icons/icon-192.png",
   },
 };
 
