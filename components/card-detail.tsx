@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getCard, type CardData, touchCard } from "@/lib/db";
+import { updateCard } from "@/lib/use-cardholder";
 import { mutate } from "swr";
 
 interface CardDetailProps {
@@ -26,6 +27,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
       setCard(c ?? null);
       setLoading(false);
       if (c) {
+        setIsInverted(c.isQrInverted ?? false);
         touchCard(c.id).then(() => mutate("cards"));
       }
     });
@@ -53,7 +55,13 @@ export function CardDetail({ cardId }: CardDetailProps) {
     // Trigger inversion after 5 seconds
     longPressTimerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
-      setIsInverted((prev) => !prev);
+      setIsInverted((prev) => {
+        const newState = !prev;
+        if (card) {
+          updateCard({ ...card, isQrInverted: newState });
+        }
+        return newState;
+      });
     }, 5000);
   };
 
@@ -91,7 +99,13 @@ export function CardDetail({ cardId }: CardDetailProps) {
     // Trigger inversion after 5 seconds
     longPressTimerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
-      setIsInverted((prev) => !prev);
+      setIsInverted((prev) => {
+        const newState = !prev;
+        if (card) {
+          updateCard({ ...card, isQrInverted: newState });
+        }
+        return newState;
+      });
     }, 5000);
   };
 
