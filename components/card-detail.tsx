@@ -27,11 +27,17 @@ export function CardDetail({ cardId }: CardDetailProps) {
       setCard(c ?? null);
       setLoading(false);
       if (c) {
-        setIsInverted(c.isQrInverted ?? false);
         touchCard(c.id).then(() => mutate("cards"));
+        setIsInverted(c.isQrInverted ?? false);
       }
     });
   }, [cardId]);
+
+  useEffect(() => {
+    if (card) {
+      setIsInverted(card.isQrInverted ?? false);
+    }
+  }, [card?.isQrInverted]);
 
   const handleMouseDown = () => {
     setIsHolding(true);
@@ -188,6 +194,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
           className="w-full h-auto max-h-[60dvh] object-contain px-4 qr-invertible transition-all duration-300 ease-out"
           style={{
             filter: isInverted ? "invert(1)" : "invert(0)",
+            transform: card.isQrRotated ? "rotate(90deg)" : "rotate(0deg)",
           }}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
