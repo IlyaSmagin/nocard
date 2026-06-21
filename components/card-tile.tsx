@@ -14,10 +14,10 @@ export function CardTile({ card, onUse }: CardTileProps) {
     <Link
       href={`/card/${card.id}`}
       onClick={() => onUse(card.id)}
-      className="relative flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card p-4 text-card-foreground transition-colors active:bg-secondary overflow-hidden"
+      className="CardInitialsContainer relative flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card p-4 text-card-foreground transition-colors active:bg-secondary overflow-hidden"
     >
       <CardInitialsBg name={card.name} />
-      <span className="font-mono text-sm text-center leading-tight tracking-wider truncate w-full relative z-10">
+      <span className="font-serif text-xl text-center leading-tight tracking-wider truncate w-full relative z-10">
         {card.name}
       </span>
     </Link>
