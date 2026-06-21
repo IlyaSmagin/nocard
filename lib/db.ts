@@ -12,6 +12,8 @@ export interface CardData {
   createdAt: number;
   orderLocked: boolean;
   order: number;
+  isQrInverted: boolean;
+  isQrRotated: boolean;
 }
 
 export interface AppSettings {

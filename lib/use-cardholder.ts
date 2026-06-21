@@ -50,6 +50,8 @@ export async function addCard(
     createdAt: Date.now(),
     orderLocked: false,
     order: allCards.length,
+    isQrInverted: card.isQrInverted ?? false,
+    isQrRotated: card.isQrRotated ?? false,
   };
   await saveCard(newCard);
   await mutate("cards", undefined, { revalidate: true });

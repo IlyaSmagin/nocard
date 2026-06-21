@@ -17,6 +17,8 @@ export function CardForm({
   const [codeImageDataUrl, setCodeImageDataUrl] = useState<string>(
     card?.codeImageDataUrl || ""
   );
+  const [isQrInverted, setIsQrInverted] = useState(card?.isQrInverted ?? false);
+  const [isQrRotated, setIsQrRotated] = useState(card?.isQrRotated ?? false);
   const [saving, setSaving] = useState(false);
   const codeUploadRef = useRef<HTMLInputElement>(null);
   const codeCameraRef = useRef<HTMLInputElement>(null);
@@ -52,12 +54,16 @@ export function CardForm({
         name: name.trim(),
         description: description.trim(),
         codeImageDataUrl,
+        isQrInverted,
+        isQrRotated,
       });
     } else {
       await addCard({
         name: name.trim(),
         description: description.trim(),
         codeImageDataUrl,
+        isQrInverted,
+        isQrRotated,
       });
     }
     setSaving(false);
@@ -107,6 +113,48 @@ export function CardForm({
               placeholder="Optional note"
               className="h-12 w-full rounded-xl border border-input bg-background px-4 font-mono text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
+          </div>
+
+          {/* QR Inversion Toggle */}
+          <div className="flex items-center justify-between">
+            <label className="font-mono text-xs tracking-widest uppercase text-muted-foreground">
+              Invert QR Colors
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsQrInverted(!isQrInverted)}
+              className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+                isQrInverted ? "bg-accent" : "bg-secondary"
+              }`}
+              aria-label="Toggle QR inversion"
+            >
+              <span
+                className={`inline-block h-6 w-6 transform rounded-full bg-foreground transition-transform ${
+                  isQrInverted ? "translate-x-7" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* QR Rotation Toggle */}
+          <div className="flex items-center justify-between">
+            <label className="font-mono text-xs tracking-widest uppercase text-muted-foreground">
+              Rotate for Long Barcodes
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsQrRotated(!isQrRotated)}
+              className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+                isQrRotated ? "bg-accent" : "bg-secondary"
+              }`}
+              aria-label="Toggle QR rotation"
+            >
+              <span
+                className={`inline-block h-6 w-6 transform rounded-full bg-foreground transition-transform ${
+                  isQrRotated ? "translate-x-7" : "translate-x-1"
+                }`}
+              />
+            </button>
           </div>
 
           {/* Code Image */}

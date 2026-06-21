@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getCard, type CardData, touchCard } from "@/lib/db";
+import { updateCard } from "@/lib/use-cardholder";
 import { mutate } from "swr";
 
 interface CardDetailProps {
@@ -27,9 +28,16 @@ export function CardDetail({ cardId }: CardDetailProps) {
       setLoading(false);
       if (c) {
         touchCard(c.id).then(() => mutate("cards"));
+        setIsInverted(c.isQrInverted ?? false);
       }
     });
   }, [cardId]);
+
+  useEffect(() => {
+    if (card) {
+      setIsInverted(card.isQrInverted ?? false);
+    }
+  }, [card?.isQrInverted]);
 
   const handleMouseDown = () => {
     setIsHolding(true);
@@ -53,7 +61,13 @@ export function CardDetail({ cardId }: CardDetailProps) {
     // Trigger inversion after 5 seconds
     longPressTimerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
-      setIsInverted((prev) => !prev);
+      setIsInverted((prev) => {
+        const newState = !prev;
+        if (card) {
+          updateCard({ ...card, isQrInverted: newState });
+        }
+        return newState;
+      });
     }, 5000);
   };
 
@@ -91,7 +105,13 @@ export function CardDetail({ cardId }: CardDetailProps) {
     // Trigger inversion after 5 seconds
     longPressTimerRef.current = setTimeout(() => {
       isLongPressRef.current = true;
-      setIsInverted((prev) => !prev);
+      setIsInverted((prev) => {
+        const newState = !prev;
+        if (card) {
+          updateCard({ ...card, isQrInverted: newState });
+        }
+        return newState;
+      });
     }, 5000);
   };
 
@@ -174,6 +194,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
           className="w-full h-auto max-h-[60dvh] object-contain px-4 qr-invertible transition-all duration-300 ease-out"
           style={{
             filter: isInverted ? "invert(1)" : "invert(0)",
+            transform: card.isQrRotated ? "rotate(90deg)" : "rotate(0deg)",
           }}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
