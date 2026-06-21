@@ -170,17 +170,16 @@ export function CardDetail({ cardId }: CardDetailProps) {
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-between bg-background px-4 pb-4 pt-safe-top">
-      {/* Header */}
+
       <header className="flex w-full items-center justify-center py-6">
         <h1 className="font-mono text-xl tracking-widest uppercase text-foreground">
           {card.name}
         </h1>
       </header>
 
-      {/* Code Image with Inversion Toggle */}
       <div className="flex flex-1 items-center justify-center w-full flex-col gap-2">
         <p 
-          className="text-xs text-muted-foreground font-mono transition-all duration-200 ease-out h-5"
+          className="text-xs text-muted-foreground font-mono transition-all delay-150 duration-200 ease-out h-5"
           style={{
             opacity: isHolding ? 1 : 0,
             pointerEvents: isHolding ? "auto" : "none",
@@ -206,14 +205,12 @@ export function CardDetail({ cardId }: CardDetailProps) {
         />
       </div>
 
-      {/* Description */}
       {card.description && (
         <p className="mt-4 text-center text-sm text-muted-foreground">
           {card.description}
         </p>
       )}
 
-      {/* Back Button */}
       <button
         onClick={() => router.back()}
         className="mt-6 flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-2xl bg-secondary text-secondary-foreground font-mono text-sm tracking-widest uppercase transition-colors active:bg-border"
