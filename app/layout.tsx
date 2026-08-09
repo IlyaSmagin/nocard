@@ -17,13 +17,35 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Cardholder",
-    startupImage: "/icons/icon-192.png",
   },
   formatDetection: {
     telephone: false,
   },
   icons: {
-    apple: "/icons/icon-192.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      {
+        url: "/icons/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
+  openGraph: {
+    title: "Cardholder",
+    description: "Your digital loyalty cards, always offline.",
+    images: [
+      {
+        url: "/icons/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Cardholder",
+      },
+    ],
   },
 };
 
@@ -42,14 +64,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark ${_ndot57.variable} ${_ndot57caps.variable}`}>
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Cardholder" />
-      </head>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );

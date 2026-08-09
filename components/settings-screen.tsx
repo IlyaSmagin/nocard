@@ -27,6 +27,7 @@ import {
 import { CardForm } from "./card-form";
 import { CardListItem } from "./card-list-item";
 import { SettingsHeader } from "./settings-header";
+import { PwaInstallSection } from "./pwa-install";
 import type { CardData } from "@/lib/db";
 
 export function SettingsScreen() {
@@ -110,6 +111,9 @@ export function SettingsScreen() {
           Settings
         </h1>
       </header>
+
+      {/* App Install */}
+      <PwaInstallSection />
 
       {/* Display Settings */}
       <section className="mb-6">
