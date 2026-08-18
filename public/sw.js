@@ -35,38 +35,11 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
   const { pathname } = new URL(event.request.url);
-  const isHtmlPage = 
-    pathname === "/" ||
-    pathname === "/all-cards" ||
-    pathname === "/settings" ||
-    pathname.startsWith("/card/");
   const isAsset = 
     pathname.includes(".") &&
     !pathname.endsWith(".html");
 
-  if (isHtmlPage) {
-    // Network-first strategy for HTML pages (ensures fresh content when online)
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          if (response && response.status === 200) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, clone);
-            });
-          }
-          return response;
-        })
-        .catch(() => {
-          // Fall back to cache if network fails
-          return caches.match(event.request).then((cached) => {
-            if (cached) return cached;
-            // Return offline fallback for missing pages
-            return caches.match("/");
-          });
-        })
-    );
-  } else if (isAsset) {
+  if (isAsset) {
     // Cache-first strategy for assets (JS, CSS, images, fonts)
     event.respondWith(
       caches.open(ASSET_CACHE).then((cache) => {
@@ -84,22 +57,27 @@ self.addEventListener("fetch", (event) => {
       })
     );
   } else {
-    // Stale-while-revalidate for other requests (API, etc.)
+    // Stale-while-revalidate for HTML pages and other requests
     event.respondWith(
       caches.match(event.request).then((cached) => {
-        const fetchPromise = fetch(event.request)
+        if (!cached) return fetch(event.request);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+        fetch(event.request, { signal: controller.signal })
           .then((response) => {
+            clearTimeout(timeoutId);
             if (response && response.status === 200) {
               const clone = response.clone();
               caches.open(CACHE_NAME).then((cache) => {
                 cache.put(event.request, clone);
               });
             }
-            return response;
           })
-          .catch(() => cached);
+          .catch(() => {});
 
-        return cached || fetchPromise;
+        return cached;
       })
     );
   }
