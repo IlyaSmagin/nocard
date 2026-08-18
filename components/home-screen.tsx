@@ -8,7 +8,7 @@ import { CardTile } from "./card-tile";
 import { EmptyHome } from "./empty-home";
 
 export function HomeScreen() {
-  const { cards, isLoading } = useCards();
+  const { cards } = useCards();
   const { settings } = useSettings();
 
   const sortedCards = useMemo(() => {
@@ -20,14 +20,6 @@ export function HomeScreen() {
 
   const displayCards = sortedCards.slice(0, 6);
   const mostRecent = sortedCards[0] ?? null;
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-background">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-foreground border-t-transparent" />
-      </div>
-    );
-  }
 
   return (
     <main className="flex min-h-dvh flex-col bg-background px-4 pb-4 pt-safe-top">

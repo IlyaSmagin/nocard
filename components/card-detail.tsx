@@ -3,8 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { getCard, type CardData, touchCard } from "@/lib/db";
-import { updateCard } from "@/lib/use-cardholder";
+import { touchCard } from "@/lib/db";
+import { useCards, updateCard } from "@/lib/use-cardholder";
 import { mutate } from "swr";
 
 interface CardDetailProps {
@@ -13,8 +13,8 @@ interface CardDetailProps {
 
 export function CardDetail({ cardId }: CardDetailProps) {
   const router = useRouter();
-  const [card, setCard] = useState<CardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { cards, isLoading } = useCards();
+  const card = cards.find((c) => c.id === cardId) ?? null;
   const [isInverted, setIsInverted] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [countdown, setCountdown] = useState(5);
@@ -23,14 +23,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
   const isLongPressRef = useRef(false);
 
   useEffect(() => {
-    getCard(cardId).then((c) => {
-      setCard(c ?? null);
-      setLoading(false);
-      if (c) {
-        touchCard(c.id).then(() => mutate("cards"));
-        setIsInverted(c.isQrInverted ?? false);
-      }
-    });
+    touchCard(cardId).then(() => mutate("cards"));
   }, [cardId]);
 
   useEffect(() => {
@@ -145,7 +138,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
     };
   }, []);
 
-  if (loading) {
+  if (isLoading && !card) {
     return (
       <div className="flex min-h-dvh items-center justify-center bg-background">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-foreground border-t-transparent" />

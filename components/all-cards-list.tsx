@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { useCards, useSettings, recordCardUse } from "@/lib/use-cardholder";
 
 export function AllCardsList() {
-  const { cards, isLoading } = useCards();
+  const { cards } = useCards();
   const { settings } = useSettings();
 
   const sortedCards = useMemo(() => {
@@ -15,14 +15,6 @@ export function AllCardsList() {
     }
     return [...cards].sort((a, b) => b.lastUsed - a.lastUsed);
   }, [cards, settings.orderLocked]);
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-background">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-foreground border-t-transparent" />
-      </div>
-    );
-  }
 
   return (
     <main className="flex min-h-dvh flex-col bg-background px-4 pb-4 pt-safe-top">
