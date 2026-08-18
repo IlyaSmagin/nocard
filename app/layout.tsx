@@ -10,6 +10,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 const _playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://v0-nocard.vercel.app"),
   title: "Cardholder",
   description: "Your digital loyalty cards, always offline.",
   manifest: "/manifest.json",
