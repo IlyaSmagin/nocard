@@ -53,6 +53,36 @@ const SAMPLE_CARDS: Omit<CardData, "lastUsed" | "createdAt">[] = [
     isQrInverted: false,
     isQrRotated: false,
   },
+  {
+    id: "sample-card-3",
+    name: "Lenta",
+    description: "",
+    codeImageDataUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAA8AQAAAAALIMg8AAAAtElEQVR42mP4jwswkCVzgNn3gbSDRUqBncXhj+mf7Q94Njxg+lk9BGR45nEIF/9j2fuf5+HxA9v3DyaZZ3f4f8pP+Ge9j7H+scJh/4aEISHzWKGAI6X5n7Tjf54J/482HhgaMg9u1Fk8OKDGXGQv3fb/wIaCB0NDRprNguePWrM8e0UP/2EH80Elc8eA06Dg3xMbe7589sMFDglDQ0Z64o/6mjT2s/YV7xhuMzg/GPwy1CzJAT2STaXPHoX7AAAAAElFTkSuQmCC",
+    orderLocked: false,
+    order: 2,
+    isQrInverted: false,
+    isQrRotated: false,
+  },
+  {
+    id: "sample-card-3",
+    name: "Bekker",
+    description: "",
+    codeImageDataUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAD6AQMAAACyIsh+AAAABlBMVEX///8bGxtm4p2ZAAAA+0lEQVR42u3YwQ3CMBBE0UEpYEugFLfuUijBBVgM2jgrSwER7HDIYf4BRck7rVDsGEpdL+NWXq8KwK0qMAsqkFjfwBPejR084N0F9oBkvTEDaKN+GMksMA2MRBL4A8BCZgicAJ4DYAPwBHaArQDfVxz/EZgEPdvfERgC62zLQrIA8c9diMQqMAw8JFdtr7RSExgDbaxkGzCMDA+BQRDPAmBLYAxYX43WAYdKrAJDoGeMeXupQGAA7I84MuJtCgicAEj0CvB+FiRwCPrnZDxry7zALDASiL2mU4FJEJt4wK8yBIZBPwNpU85Grwp8OsE4Bv12vE0FfgRKXbAXzQOlyFolY78AAAAASUVORK5CYII=",
+    orderLocked: false,
+    order: 3,
+    isQrInverted: false,
+    isQrRotated: false,
+  },
+  {
+    id: "sample-card-4",
+    name: "Magnit",
+    description: "",
+    codeImageDataUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVgAAAFSAQAAAACfjPqLAAABJklEQVR42u3bMW6DQBBG4YlcpPQRchSOBkfjKD6CyxSRJ/rR4BmBi0iWhiC916343I28wNrmf8+w2HNbq/nDLv5tV1eTlUYsts1++Nosa/YZy6lcwWJb7Y+pL59zfm82yMYVLPZoq4Vjsf/IqgGLPc5GsqrMb4TFttrSZp+3DIt9y26SfR0W22XjUfu+7ND5pVnvJ9WIxbbZLD9Y7yevfsNiO61GNrb2pYurZSEbk43FNlorj9qmcmTdn1cci+2yKuc3G3yK+cVi++1+n1ejZ1hsn7WabM6vrYc6WOxbdv8evB7HPJ43lwMW22X354Uqf38Wi9lGLPYY67nYPONgsYfYOMe5xxl2fReExTbatcVmYx5+GxbbaGuuXs0vFttjz/jfs1PZX9sFaUek6r6gAAAAAElFTkSuQmCC",
+    orderLocked: false,
+    order: 4,
+    isQrInverted: false,
+    isQrRotated: false,
+  },
 ];
 
 function openDB(): Promise<IDBDatabase> {
