@@ -1,15 +1,17 @@
-"use client";
-
-import { use } from "react";
 import { AppShell } from "@/components/app-shell";
 import { CardDetail } from "@/components/card-detail";
+import { STATIC_SAMPLE_IDS } from "@/lib/db";
 
-export default function CardPage({
+export function generateStaticParams() {
+  return STATIC_SAMPLE_IDS.map((id) => ({ id }));
+}
+
+export default async function CardPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = use(params);
+  const { id } = await params;
 
   return (
     <AppShell>

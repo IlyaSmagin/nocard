@@ -85,6 +85,9 @@ const SAMPLE_CARDS: Omit<CardData, "lastUsed" | "createdAt">[] = [
   },
 ];
 
+// IDs of sample cards, used for static prerendering of /card/[id] pages
+export const STATIC_SAMPLE_IDS = SAMPLE_CARDS.map((card) => card.id);
+
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);

@@ -1,8 +1,8 @@
-"use client";
-
 import { Suspense } from "react";
 import { AppShell } from "@/components/app-shell";
 import { SettingsScreen } from "@/components/settings-screen";
+
+export const dynamic = "force-static";
 
 export default function SettingsPage() {
   return (
