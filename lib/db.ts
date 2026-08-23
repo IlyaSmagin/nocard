@@ -64,7 +64,7 @@ const SAMPLE_CARDS: Omit<CardData, "lastUsed" | "createdAt">[] = [
     isQrRotated: false,
   },
   {
-    id: "sample-card-3",
+    id: "sample-card-4",
     name: "Bekker",
     description: "",
     codeImageDataUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAD6AQMAAACyIsh+AAAABlBMVEX///8bGxtm4p2ZAAAA+0lEQVR42u3YwQ3CMBBE0UEpYEugFLfuUijBBVgM2jgrSwER7HDIYf4BRck7rVDsGEpdL+NWXq8KwK0qMAsqkFjfwBPejR084N0F9oBkvTEDaKN+GMksMA2MRBL4A8BCZgicAJ4DYAPwBHaArQDfVxz/EZgEPdvfERgC62zLQrIA8c9diMQqMAw8JFdtr7RSExgDbaxkGzCMDA+BQRDPAmBLYAxYX43WAYdKrAJDoGeMeXupQGAA7I84MuJtCgicAEj0CvB+FiRwCPrnZDxry7zALDASiL2mU4FJEJt4wK8yBIZBPwNpU85Grwp8OsE4Bv12vE0FfgRKXbAXzQOlyFolY78AAAAASUVORK5CYII=",
@@ -74,7 +74,7 @@ const SAMPLE_CARDS: Omit<CardData, "lastUsed" | "createdAt">[] = [
     isQrRotated: false,
   },
   {
-    id: "sample-card-4",
+    id: "sample-card-5",
     name: "Magnit",
     description: "",
     codeImageDataUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVgAAAFSAQAAAACfjPqLAAABJklEQVR42u3bMW6DQBBG4YlcpPQRchSOBkfjKD6CyxSRJ/rR4BmBi0iWhiC916343I28wNrmf8+w2HNbq/nDLv5tV1eTlUYsts1++Nosa/YZy6lcwWJb7Y+pL59zfm82yMYVLPZoq4Vjsf/IqgGLPc5GsqrMb4TFttrSZp+3DIt9y26SfR0W22XjUfu+7ND5pVnvJ9WIxbbZLD9Y7yevfsNiO61GNrb2pYurZSEbk43FNlorj9qmcmTdn1cci+2yKuc3G3yK+cVi++1+n1ejZ1hsn7WabM6vrYc6WOxbdv8evB7HPJ43lwMW22X354Uqf38Wi9lGLPYY67nYPONgsYfYOMe5xxl2fReExTbatcVmYx5+GxbbaGuuXs0vFttjz/jfs1PZX9sFaUek6r6gAAAAAElFTkSuQmCC",
