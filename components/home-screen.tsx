@@ -41,32 +41,24 @@ export function HomeScreen() {
         <EmptyHome />
       ) : (
         <>
-          {/* Add Card Button - Top */}
-          <Link
-            href="/settings?add=true"
-            className="mb-4 flex h-16 w-full items-center justify-center rounded-2xl bg-foreground text-background font-serif text-lg font-bold tracking-wide transition-colors active:opacity-80"
-          >
-            <Plus className="mr-2 h-5 w-5" />
-            Add Card
-          </Link>
+          {cards.length > 6 ? (
+            <Link
+              href="/all-cards"
+              className="mb-4 flex h-16 w-full items-center justify-center rounded-2xl border-2 border-foreground bg-background text-foreground font-serif text-lg font-bold tracking-wide transition-colors active:bg-secondary"
+            >
+              All Cards ({cards.length})
+            </Link>
+          ) : null}
 
-          {/* All Cards Button */}
-          <Link
-            href="/all-cards"
-            className="mb-4 flex h-16 w-full items-center justify-center rounded-2xl border-2 border-foreground bg-background text-foreground font-serif text-lg font-bold tracking-wide transition-colors active:bg-secondary"
-          >
-            All Cards ({cards.length})
-          </Link>
-
-          {/* Card Grid */}
           <div
             className={`grid gap-3 flex-1 ${
-              settings.columnCount === 1
-                ? "grid-cols-1"
-                : "grid-cols-2"
+              settings.columnCount === 1 ? "grid-cols-1" : "grid-cols-2"
             }`}
             style={{
-              gridAutoRows: settings.columnCount === 1 ? "minmax(72px, auto)" : "minmax(96px, auto)",
+              gridAutoRows:
+                settings.columnCount === 1
+                  ? "minmax(72px, auto)"
+                  : "minmax(96px, auto)",
             }}
           >
             {displayCards.map((card) => (
