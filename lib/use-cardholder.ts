@@ -71,8 +71,8 @@ export async function removeCard(id: string) {
 export async function recordCardUse(id: string) {
   const lastUsed = Date.now();
 
-  // Keep the mounted home list populated while the usage write is persisted.
-  await mutate(
+  // Update the shared cache synchronously so navigation never renders an empty list.
+  void mutate(
     "cards",
     (cards?: CardData[]) =>
       cards?.map((card) => (card.id === id ? { ...card, lastUsed } : card)),
