@@ -14,6 +14,12 @@ import {
   type AppSettings,
 } from "./db";
 
+const cardCache = new Map<string, CardData>();
+
+export function getCachedCard(id: string) {
+  return cardCache.get(id) ?? null;
+}
+
 export function useCards() {
   const { data, error, isLoading, mutate: localMutate } = useSWR("cards", getAllCards, {
     fallbackData: [],
@@ -21,7 +27,9 @@ export function useCards() {
     revalidateOnReconnect: true,
     dedupingInterval: 0,
   });
-  return { cards: data || [], error, isLoading, mutate: localMutate };
+  const cards = data || [];
+  for (const card of cards) cardCache.set(card.id, card);
+  return { cards, error, isLoading, mutate: localMutate };
 }
 
 export function useSettings() {

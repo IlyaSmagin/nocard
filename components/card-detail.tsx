@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { useCards, updateCard, recordCardUse } from "@/lib/use-cardholder";
+import { useCards, getCachedCard, updateCard, recordCardUse } from "@/lib/use-cardholder";
 
 interface CardDetailProps {
   cardId: string;
@@ -12,7 +12,7 @@ interface CardDetailProps {
 export function CardDetail({ cardId }: CardDetailProps) {
   const router = useRouter();
   const { cards, isLoading } = useCards();
-  const card = cards.find((c) => c.id === cardId) ?? null;
+  const card = cards.find((c) => c.id === cardId) ?? getCachedCard(cardId);
   const [isInverted, setIsInverted] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [countdown, setCountdown] = useState(5);

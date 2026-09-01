@@ -12,6 +12,7 @@ export function CardTile({ card }: CardTileProps) {
   return (
     <Link
       href={`/card/${card.id}`}
+      prefetch={true}
       className="CardInitialsContainer relative flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card p-4 text-card-foreground transition-colors active:bg-secondary overflow-hidden"
     >
       <CardInitialsBg name={card.name} />
