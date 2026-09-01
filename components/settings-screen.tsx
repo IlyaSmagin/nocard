@@ -26,6 +26,7 @@ import {
 } from "@/lib/use-cardholder";
 import { CardForm } from "./card-form";
 import { CardListItem } from "./card-list-item";
+import { SettingsHeader } from "./settings-header";
 import { PwaInstallSection } from "./pwa-install";
 import type { CardData } from "@/lib/db";
 

@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { Settings, Plus } from "lucide-react";
-import { useCards, useSettings } from "@/lib/use-cardholder";
+import { useCards, useSettings, recordCardUse } from "@/lib/use-cardholder";
 import { CardTile } from "./card-tile";
 import { EmptyHome } from "./empty-home";
 
@@ -62,7 +62,7 @@ export function HomeScreen() {
             }}
           >
             {displayCards.map((card) => (
-              <CardTile key={card.id} card={card} />
+              <CardTile key={card.id} card={card} onUse={recordCardUse} />
             ))}
           </div>
 
@@ -70,6 +70,7 @@ export function HomeScreen() {
           {mostRecent && (
             <Link
               href={`/card/${mostRecent.id}`}
+              onClick={() => recordCardUse(mostRecent.id)}
               className="mt-4 flex h-14 w-full items-center justify-center rounded-2xl bg-accent text-accent-foreground font-mono text-base tracking-widest uppercase transition-colors active:opacity-80"
             >
               {mostRecent.name}

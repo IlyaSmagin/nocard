@@ -14,12 +14,6 @@ import {
   type AppSettings,
 } from "./db";
 
-const cardCache = new Map<string, CardData>();
-
-export function getCachedCard(id: string) {
-  return cardCache.get(id) ?? null;
-}
-
 export function useCards() {
   const { data, error, isLoading, mutate: localMutate } = useSWR("cards", getAllCards, {
     fallbackData: [],
@@ -27,9 +21,7 @@ export function useCards() {
     revalidateOnReconnect: true,
     dedupingInterval: 0,
   });
-  const cards = data || [];
-  for (const card of cards) cardCache.set(card.id, card);
-  return { cards, error, isLoading, mutate: localMutate };
+  return { cards: data || [], error, isLoading, mutate: localMutate };
 }
 
 export function useSettings() {
@@ -77,23 +69,8 @@ export async function removeCard(id: string) {
 }
 
 export async function recordCardUse(id: string) {
-  const lastUsed = Date.now();
-
-  // Update the shared cache synchronously so navigation never renders an empty list.
-  void mutate(
-    "cards",
-    (cards?: CardData[]) =>
-      cards?.map((card) => (card.id === id ? { ...card, lastUsed } : card)),
-    { revalidate: false },
-  );
-
-  try {
-    await touchCard(id);
-  } catch (error) {
-    // IndexedDB remains the source of truth if a write fails.
-    console.error("Failed to record card usage", error);
-    await mutate("cards");
-  }
+  await touchCard(id);
+  await mutate("cards", undefined, { revalidate: true });
 }
 
 export async function reorderCards(reorderedCards: CardData[]) {

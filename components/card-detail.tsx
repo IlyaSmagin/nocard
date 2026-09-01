@@ -3,7 +3,9 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { useCards, getCachedCard, updateCard, recordCardUse } from "@/lib/use-cardholder";
+import { touchCard } from "@/lib/db";
+import { useCards, updateCard } from "@/lib/use-cardholder";
+import { mutate } from "swr";
 
 interface CardDetailProps {
   cardId: string;
@@ -12,7 +14,7 @@ interface CardDetailProps {
 export function CardDetail({ cardId }: CardDetailProps) {
   const router = useRouter();
   const { cards, isLoading } = useCards();
-  const card = cards.find((c) => c.id === cardId) ?? getCachedCard(cardId);
+  const card = cards.find((c) => c.id === cardId) ?? null;
   const [isInverted, setIsInverted] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [countdown, setCountdown] = useState(5);
@@ -21,7 +23,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
   const isLongPressRef = useRef(false);
 
   useEffect(() => {
-    void recordCardUse(cardId);
+    touchCard(cardId).then(() => mutate("cards"));
   }, [cardId]);
 
   useEffect(() => {
@@ -120,7 +122,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
 
   const handleContextMenu = (e: React.MouseEvent<HTMLImageElement>) => {
     // Suppress context menu on touch devices to prevent interference with hold-to-invert
-    if (/mobile|tablet|android|ios/i.test(navigator.userAgent)) {
+    if (e.pointerType === "touch" || /mobile|tablet|android|ios/i.test(navigator.userAgent)) {
       e.preventDefault();
     }
   };
