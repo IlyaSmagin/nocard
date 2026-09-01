@@ -13,7 +13,7 @@ interface CardDetailProps {
 
 export function CardDetail({ cardId }: CardDetailProps) {
   const router = useRouter();
-  const { cards, isLoading } = useCards();
+  const { cards } = useCards();
   const card = cards.find((c) => c.id === cardId) ?? null;
   const [isInverted, setIsInverted] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
@@ -122,7 +122,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
 
   const handleContextMenu = (e: React.MouseEvent<HTMLImageElement>) => {
     // Suppress context menu on touch devices to prevent interference with hold-to-invert
-    if (e.pointerType === "touch" || /mobile|tablet|android|ios/i.test(navigator.userAgent)) {
+    if (/mobile|tablet|android|ios/i.test(navigator.userAgent)) {
       e.preventDefault();
     }
   };
@@ -137,14 +137,6 @@ export function CardDetail({ cardId }: CardDetailProps) {
       }
     };
   }, []);
-
-  if (isLoading && !card) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-background">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-foreground border-t-transparent" />
-      </div>
-    );
-  }
 
   if (!card) {
     return (
