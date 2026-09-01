@@ -69,8 +69,23 @@ export async function removeCard(id: string) {
 }
 
 export async function recordCardUse(id: string) {
-  await touchCard(id);
-  await mutate("cards", undefined, { revalidate: true });
+  const lastUsed = Date.now();
+
+  // Keep the mounted home list populated while the usage write is persisted.
+  await mutate(
+    "cards",
+    (cards?: CardData[]) =>
+      cards?.map((card) => (card.id === id ? { ...card, lastUsed } : card)),
+    { revalidate: false },
+  );
+
+  try {
+    await touchCard(id);
+  } catch (error) {
+    // IndexedDB remains the source of truth if a write fails.
+    console.error("Failed to record card usage", error);
+    await mutate("cards");
+  }
 }
 
 export async function reorderCards(reorderedCards: CardData[]) {

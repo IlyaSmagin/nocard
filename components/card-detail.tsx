@@ -3,9 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { touchCard } from "@/lib/db";
-import { useCards, updateCard } from "@/lib/use-cardholder";
-import { mutate } from "swr";
+import { useCards, updateCard, recordCardUse } from "@/lib/use-cardholder";
 
 interface CardDetailProps {
   cardId: string;
@@ -23,7 +21,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
   const isLongPressRef = useRef(false);
 
   useEffect(() => {
-    touchCard(cardId).then(() => mutate("cards"));
+    void recordCardUse(cardId);
   }, [cardId]);
 
   useEffect(() => {
