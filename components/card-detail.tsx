@@ -120,7 +120,7 @@ export function CardDetail({ cardId }: CardDetailProps) {
 
   const handleContextMenu = (e: React.MouseEvent<HTMLImageElement>) => {
     // Suppress context menu on touch devices to prevent interference with hold-to-invert
-    if (e.pointerType === "touch" || /mobile|tablet|android|ios/i.test(navigator.userAgent)) {
+    if (/mobile|tablet|android|ios/i.test(navigator.userAgent)) {
       e.preventDefault();
     }
   };
