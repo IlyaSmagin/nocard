@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { touchCard } from "@/lib/db";
 import { useCards, updateCard } from "@/lib/use-cardholder";
@@ -13,6 +14,10 @@ interface CardDetailProps {
 
 export function CardDetail({ cardId }: CardDetailProps) {
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/");
+  }, [router]);
   const { cards } = useCards();
   const card = cards.find((c) => c.id === cardId) ?? null;
   const [isInverted, setIsInverted] = useState(false);
@@ -196,13 +201,14 @@ export function CardDetail({ cardId }: CardDetailProps) {
         </p>
       )}
 
-      <button
-        onClick={() => router.back()}
+      <Link
+        href="/"
+        prefetch={true}
         className="mt-6 flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-2xl bg-secondary text-secondary-foreground font-mono text-sm tracking-widest uppercase transition-colors active:bg-border"
       >
         <ArrowLeft className="h-5 w-5" />
         Back
-      </button>
+      </Link>
     </main>
   );
 }

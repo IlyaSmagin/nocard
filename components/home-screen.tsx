@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { Settings, Plus } from "lucide-react";
-import { useCards, useSettings, recordCardUse } from "@/lib/use-cardholder";
+import { useCards, useSettings } from "@/lib/use-cardholder";
 import { CardTile } from "./card-tile";
 import { EmptyHome } from "./empty-home";
 
@@ -44,6 +44,7 @@ export function HomeScreen() {
           {cards.length > 6 ? (
             <Link
               href="/all-cards"
+              prefetch={true}
               className="mb-4 flex h-16 w-full items-center justify-center rounded-2xl border-2 border-foreground bg-background text-foreground font-serif text-lg font-bold tracking-wide transition-colors active:bg-secondary"
             >
               All Cards ({cards.length})
@@ -62,7 +63,7 @@ export function HomeScreen() {
             }}
           >
             {displayCards.map((card) => (
-              <CardTile key={card.id} card={card} onUse={recordCardUse} />
+              <CardTile key={card.id} card={card} />
             ))}
           </div>
 
@@ -70,7 +71,7 @@ export function HomeScreen() {
           {mostRecent && (
             <Link
               href={`/card/${mostRecent.id}`}
-              onClick={() => recordCardUse(mostRecent.id)}
+              prefetch={true}
               className="mt-4 flex h-14 w-full items-center justify-center rounded-2xl bg-accent text-accent-foreground font-mono text-base tracking-widest uppercase transition-colors active:opacity-80"
             >
               {mostRecent.name}

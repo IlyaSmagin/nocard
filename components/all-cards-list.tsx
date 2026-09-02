@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { useCards, useSettings, recordCardUse } from "@/lib/use-cardholder";
+import { useCards, useSettings } from "@/lib/use-cardholder";
 
 export function AllCardsList() {
   const { cards } = useCards();
@@ -22,6 +22,7 @@ export function AllCardsList() {
       <header className="flex items-center gap-4 py-4">
         <Link
           href="/"
+          prefetch={true}
           className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors active:bg-border"
           aria-label="Back to home"
         >
@@ -38,7 +39,6 @@ export function AllCardsList() {
           <Link
             key={card.id}
             href={`/card/${card.id}`}
-            onClick={() => recordCardUse(card.id)}
             className="flex h-16 items-center gap-4 rounded-2xl border border-border bg-card px-4 text-card-foreground transition-colors active:bg-secondary"
           >
             <div className="flex flex-col min-w-0 flex-1">
